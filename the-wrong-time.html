@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Inner Circle — Case File No.2: The Wrong Time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --onyx:#0c0d10;
+    --onyx-2:#16181d;
+    --onyx-3:#1f222a;
+    --ivory:#f4efe4;
+    --champagne:#c9a769;
+    --champagne-light:#e3cd9c;
+    --emerald:#3c6b5c;
+    --emerald-light:#5c8d7c;
+    --wine:#7a2e3a;
+    --wine-light:#9e4152;
+    --muted:#9aa0ab;
+    --line:#2a2d35;
+    --shadow:0 20px 50px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--onyx);color:var(--ivory);
+    font-family:'Inter',sans-serif;line-height:1.75;min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:.01em;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--champagne-light);}
+  button{font-family:inherit;cursor:pointer;background:none;color:inherit;}
+  :focus-visible{outline:1px solid var(--champagne);outline-offset:3px;}
+
+  /* ===== TOPBAR ===== */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(12,13,16,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
+  .topbar-inner{max-width:1080px;margin:0 auto;padding:1rem 1.3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:.6rem;}
+  .brand .gem{color:var(--champagne);font-size:.9rem;transform:rotate(45deg);display:inline-block;}
+  .brand-text{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+  nav{display:flex;gap:1.4rem;flex-wrap:wrap;}
+  nav button{
+    font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);padding:.3rem 0;border-bottom:1px solid transparent;
+    transition:.2s;
+  }
+  nav button:hover{color:var(--ivory);}
+  nav button.active{color:var(--champagne);border-color:var(--champagne);}
+
+  main{max-width:1080px;margin:0 auto;padding:0 1.3rem 5rem;}
+  .view{display:none;animation:fadein .5s ease;}
+  .view.active{display:block;}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+  .lot-label{font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--champagne);margin-bottom:.7rem;}
+  .th-note{color:var(--muted);font-size:.86rem;font-style:italic;margin:.3rem 0 1.6rem;}
+  hr.rule{border:none;border-top:1px solid var(--line);margin:2.6rem 0;}
+  .gold-line{width:64px;height:1px;background:var(--champagne);margin:.9rem 0 1.6rem;border:none;}
+
+  /* ===== HERO ===== */
+  .hero{padding:5rem 0 3rem;text-align:center;position:relative;}
+  .hero .kicker{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);}
+  .hero h1{font-size:clamp(2.4rem,6vw,4.2rem);margin:.7rem 0 0;color:var(--ivory);font-style:italic;}
+  .hero .underline{
+    width:0;height:1px;background:var(--champagne);margin:1.1rem auto 1.3rem;
+    animation:draw 1.4s .3s ease forwards;
+  }
+  @keyframes draw{to{width:120px;}}
+  .gem-mark{
+    display:inline-block;width:11px;height:11px;background:var(--champagne);
+    transform:rotate(45deg);margin:0 auto 1.4rem;animation:glint 2.6s ease-in-out .8s infinite;
+  }
+  @keyframes glint{0%,100%{opacity:.55;transform:rotate(45deg) scale(1);}50%{opacity:1;transform:rotate(45deg) scale(1.25);}}
+  .hero .lead{max-width:520px;margin:0 auto;color:#c9cdd4;font-size:1.02rem;}
+  .cta-row{margin-top:2.4rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+  .btn{
+    border:1px solid var(--champagne);border-radius:0;padding:.8rem 1.7rem;
+    font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.18em;
+    text-transform:uppercase;transition:.2s;
+  }
+  .btn-primary{background:var(--champagne);color:var(--onyx);font-weight:600;}
+  .btn-primary:hover{background:var(--champagne-light);}
+  .btn-ghost{background:transparent;color:var(--ivory);border-color:var(--line);}
+  .btn-ghost:hover{border-color:var(--champagne);color:var(--champagne);}
+  .btn-wine{border-color:var(--wine-light);color:var(--wine-light);}
+  .btn-wine:hover{background:var(--wine);color:var(--ivory);}
+
+  .howto{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0;margin-top:3rem;border-top:1px solid var(--line);}
+  .howto .step{padding:1.6rem 1.4rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .howto .step:last-child{border-right:none;}
+  .howto .step .num{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--champagne);font-style:italic;}
+  .howto .step h3{margin:.4rem 0 .5rem;font-size:1.1rem;font-weight:500;}
+  .howto .step p{margin:0;font-size:.85rem;color:var(--muted);}
+
+  /* ===== SECTION HEAD ===== */
+  .section-head{margin:0 0 1.6rem;padding-top:3.2rem;}
+  .section-head h2{font-size:2.1rem;margin:.1rem 0;font-style:italic;}
+
+  /* ===== CASE BRIEF ===== */
+  .case-copy p{margin:0 0 1.25em;font-size:1.02rem;color:#e2e0da;max-width:660px;}
+  .quote-hook{margin-top:1.6rem;padding:1.4rem 1.6rem;border-left:1px solid var(--champagne);font-style:italic;color:var(--champagne-light);background:var(--onyx-2);max-width:640px;}
+  .vocab{border-bottom:1px solid var(--champagne);cursor:pointer;color:var(--ivory);}
+  .vocab:hover{color:var(--champagne-light);}
+
+  /* ===== SUSPECTS ===== */
+  .suspect-list{display:flex;flex-direction:column;}
+  .suspect-row{
+    display:grid;grid-template-columns:110px 1fr;gap:1.6rem;
+    padding:2.2rem 0;border-top:1px solid var(--line);
+  }
+  .suspect-row:last-child{border-bottom:1px solid var(--line);}
+  .lot-number{font-family:'Cormorant Garamond',serif;font-size:2.6rem;font-style:italic;color:var(--champagne);line-height:1;}
+  .suspect-name{margin:0;font-size:1.5rem;font-style:italic;}
+  .suspect-role{font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--emerald-light);margin:.3rem 0 1rem;}
+  .time-tags{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem;}
+  .time-tag{font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.05em;color:var(--muted);border:1px solid var(--line);padding:.25rem .6rem;}
+  .narration{font-style:italic;color:var(--muted);font-size:.92rem;margin:.7rem 0;}
+  blockquote{margin:.8rem 0;padding-left:1.1rem;border-left:2px solid var(--emerald-light);color:#eae7de;font-size:1rem;}
+
+  /* ===== EVIDENCE ROOM ===== */
+  .notebook{background:var(--onyx-2);border:1px solid var(--line);padding:1.8rem 2rem;margin-bottom:2rem;}
+  .notebook h3{margin-top:0;font-size:1.3rem;font-style:italic;}
+  .notebook ul{margin:.7rem 0 0;padding-left:1.2rem;color:#c7cbd3;}
+  .notebook li{margin-bottom:.6rem;font-size:.95rem;}
+
+  .game-card{background:var(--onyx-2);border:1px solid var(--line);padding:1.8rem 2rem;margin-bottom:2rem;}
+  .game-card h3{margin-top:0;font-size:1.3rem;font-style:italic;}
+  .game-sub{color:var(--muted);font-size:.86rem;margin-top:-.5rem;margin-bottom:1.2rem;}
+
+  .pool,.sequence{display:flex;flex-wrap:wrap;gap:.5rem;min-height:46px;padding:.7rem;border:1px dashed var(--line);}
+  .sequence{margin-top:.8rem;}
+  .chip{background:var(--champagne);color:var(--onyx);border:none;padding:.5rem .75rem;font-size:.78rem;font-family:'IBM Plex Mono',monospace;font-weight:600;}
+  .chip.placed{background:var(--onyx-3);color:var(--ivory);border:1px solid var(--champagne);}
+  .chip.correct{background:var(--emerald);color:#fff;}
+  .chip.wrong{background:var(--wine);color:#fff;}
+  .slot-num{opacity:.6;margin-right:.35rem;}
+  .game-actions{display:flex;gap:.7rem;margin-top:1.1rem;flex-wrap:wrap;}
+  .feedback{margin-top:1rem;font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--champagne-light);min-height:1.4em;}
+
+  .quiz-q{margin-bottom:1.4rem;}
+  .quiz-q p{font-weight:600;color:var(--ivory);margin-bottom:.6rem;font-size:.96rem;}
+  .quiz-opt{display:block;width:100%;text-align:left;background:var(--onyx);border:1px solid var(--line);color:var(--ivory);padding:.6rem .85rem;margin-bottom:.5rem;font-size:.9rem;transition:.15s;}
+  .quiz-opt:hover{border-color:var(--champagne);}
+  .quiz-opt.correct{background:rgba(60,107,92,.35);border-color:var(--emerald);}
+  .quiz-opt.wrong{background:rgba(122,46,58,.35);border-color:var(--wine);}
+  .quiz-score{font-family:'IBM Plex Mono',monospace;color:var(--champagne-light);margin-top:.7rem;font-size:.85rem;}
+
+  /* ===== VOCAB FLASHCARDS ===== */
+  .flash-grid{display:grid;gap:1px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));background:var(--line);border:1px solid var(--line);}
+  .flip-card{perspective:900px;height:104px;background:var(--onyx);}
+  .flip-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;}
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-front,.flip-back{position:absolute;inset:0;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;text-align:center;padding:.7rem;font-size:.85rem;}
+  .flip-front{background:var(--onyx);color:var(--ivory);font-weight:500;font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;}
+  .flip-back{background:var(--champagne);color:var(--onyx);transform:rotateY(180deg);flex-direction:column;gap:.2rem;}
+  .flip-back .th{font-size:.92rem;font-weight:700;}
+  .flip-back .def{font-size:.7rem;font-style:italic;}
+
+  /* ===== ACCUSE ===== */
+  .accuse-grid{display:grid;gap:1px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:1.6rem;background:var(--line);border:1px solid var(--line);}
+  .accuse-btn{background:var(--onyx-2);padding:1.5rem;text-align:left;}
+  .accuse-btn:hover{background:var(--onyx-3);}
+  .accuse-btn .suspect-name{font-size:1.3rem;margin-bottom:.2rem;}
+  .hints{margin-top:2.2rem;}
+  .hint-box{background:var(--onyx-2);border-left:2px solid var(--champagne);padding:.9rem 1.1rem;margin-top:.7rem;font-size:.9rem;color:#dcd8cd;}
+
+  /* ===== MODAL / POPOVER ===== */
+  .modal-overlay{position:fixed;inset:0;background:rgba(6,7,9,.82);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem;}
+  .modal{background:var(--onyx-2);border:1px solid var(--champagne);max-width:420px;width:100%;padding:2rem;box-shadow:var(--shadow);text-align:center;}
+  .modal h3{margin-top:0;font-style:italic;font-size:1.4rem;}
+  .modal p{color:#d9d6cd;font-size:.94rem;}
+  .modal .row{display:flex;gap:.8rem;justify-content:center;margin-top:1.4rem;flex-wrap:wrap;}
+  .stamp-result{display:inline-block;border:1px solid;padding:.4rem 1.1rem;font-family:'IBM Plex Mono',monospace;letter-spacing:.18em;text-transform:uppercase;font-size:.72rem;margin-bottom:1rem;}
+  .stamp-win{color:var(--emerald-light);border-color:var(--emerald-light);}
+  .stamp-lose{color:var(--wine-light);border-color:var(--wine-light);}
+
+  .popover{position:absolute;z-index:60;max-width:240px;background:var(--champagne);color:var(--onyx);padding:.65rem .85rem;box-shadow:var(--shadow);font-size:.83rem;}
+  .popover .th{font-weight:700;font-size:.92rem;display:block;margin-bottom:.15rem;font-family:'Cormorant Garamond',serif;}
+  .popover .def{font-style:italic;font-size:.76rem;}
+  .popover .close{position:absolute;top:2px;right:8px;font-size:.9rem;font-weight:700;color:var(--onyx);}
+
+  footer{text-align:center;padding:2.4rem 1rem;color:#565b64;font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.1em;border-top:1px solid var(--line);margin-top:3rem;text-transform:uppercase;}
+
+  @media (prefers-reduced-motion:reduce){
+    .hero .underline{animation:none;width:120px;}
+    .gem-mark{animation:none;}
+    .view{animation:none;}
+  }
+  @media (max-width:640px){
+    .suspect-row{grid-template-columns:1fr;}
+    .lot-number{font-size:1.6rem;}
+    .howto .step{border-right:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="gem">◆</span><span class="brand-text">The Inner Circle</span></div>
+    <nav id="mainNav">
+      <button data-view="home" class="active">Home</button>
+      <button data-view="case">The Case</button>
+      <button data-view="suspects">Suspects</button>
+      <button data-view="evidence">Evidence</button>
+      <button data-view="vocab">Vocabulary</button>
+      <button data-view="accuse">Accuse</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ HOME ============ -->
+  <section id="home" class="view active">
+    <div class="hero">
+      <div class="kicker">Case File No. 02</div>
+      <h1>The Wrong Time</h1>
+      <div class="underline"></div>
+      <span class="gem-mark" aria-hidden="true"></span>
+      <p class="lead">A diamond dealer. A locked glass case. A missing stone worth a fortune — and three guests who all say they weren't there. Detective Reyes needs a second opinion.</p>
+      <div class="cta-row">
+        <button class="btn btn-primary" data-view="case">Begin Investigation →</button>
+        <button class="btn btn-ghost" data-view="vocab">Vocabulary Bank</button>
+      </div>
+    </div>
+
+    <div class="section-head" style="padding-top:0;">
+      <div class="lot-label">How to play · วิธีเล่น</div>
+      <h2>Your role, Detective</h2>
+      <p class="th-note">อ่านคดี สัมภาษณ์ผู้ต้องสงสัย เก็บหลักฐาน แล้วชี้ตัวคนร้าย — คำตอบไม่ได้บอกตรงๆ ต้องอ่านให้ละเอียด</p>
+    </div>
+    <div class="howto">
+      <div class="step"><div class="num">I</div><h3>Read the case</h3><p>Start with the case file to learn what happened at the Ashford estate.</p></div>
+      <div class="step"><div class="num">II</div><h3>Question the guests</h3><p>Read all three testimonies. Every detail counts.</p></div>
+      <div class="step"><div class="num">III</div><h3>Examine the evidence</h3><p>Visit the Evidence room, answer the notebook questions, and play the challenges.</p></div>
+      <div class="step"><div class="num">IV</div><h3>Name the culprit</h3><p>When you're ready, make your accusation — and explain your reasoning.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ THE CASE ============ -->
+  <section id="case" class="view">
+    <div class="section-head">
+      <div class="lot-label">Lot 01 — Case Brief</div>
+      <h2>What happened at the Ashford estate</h2>
+      <p class="th-note">อ่านเรื่องราวการค้นพบเหตุการณ์ — คลิกคำที่ขีดเส้นทองเพื่อดูคำแปล</p>
+    </div>
+    <div class="case-copy">
+      <p>Mr. Julian Ashford was a famous <span class="vocab" data-term="diamond-dealer">diamond dealer</span>. Everyone in the city knew his name and his shop.</p>
+
+      <p>On Friday night, Mr. Ashford held a big party at his house — his <span class="vocab" data-term="retirement-party">retirement party</span>. Many old friends came to celebrate.</p>
+
+      <p>At 9:00 PM, Mr. Ashford left the party and walked to his <span class="vocab" data-term="private-office">private office</span> to check his most famous diamond, the "Ashford Star." It sat inside a locked <span class="vocab" data-term="glass-case">glass case</span> on his desk.</p>
+
+      <p>At 9:45 PM, a <span class="vocab" data-term="waiter">waiter</span> walked past the office. The door was open. Mr. Ashford was lying on the floor, not moving. The glass case was open too — and the Ashford Star was gone.</p>
+
+      <p>The <span class="vocab" data-term="police-doctor">police doctor</span> arrived quickly. He said Mr. Ashford died sometime between 9:00 PM and 9:30 PM, right in the middle of his own party.</p>
+
+      <p>Detective Reyes put down her tea and opened her <span class="vocab" data-term="notebook">notebook</span>. Three guests had walked near the office that night. Three different stories. It was time to listen carefully.</p>
+
+      <div class="quote-hook">Three guests. Three stories. But one small detail doesn't tell time the way Mr. Drake thinks it does, Detective. Look closely — what's wrong with his watch?</div>
+    </div>
+    <div class="cta-row" style="margin-top:2rem;justify-content:flex-start;">
+      <button class="btn btn-primary" data-view="suspects">Interview the Guests →</button>
+    </div>
+  </section>
+
+  <!-- ============ SUSPECTS ============ -->
+  <section id="suspects" class="view">
+    <div class="section-head">
+      <div class="lot-label">Lot 02 — Interview Room</div>
+      <h2>Three guests, three stories</h2>
+      <p class="th-note">อ่านคำให้การของผู้ต้องสงสัยทั้งสามคนอย่างละเอียด — เวลาและรายละเอียดเล็กๆ สำคัญมาก</p>
+    </div>
+
+    <div class="suspect-list">
+
+      <div class="suspect-row">
+        <div class="lot-number">01</div>
+        <div>
+          <h3 class="suspect-name">Mr. Bennett</h3>
+          <div class="suspect-role"><span class="vocab" data-term="business-partner">Business Partner</span></div>
+          <div class="time-tags"><span class="time-tag">Wine Cellar · 8:30 PM</span></div>
+          <p class="narration">Mr. Bennett walked in first, still holding a glass of wine.</p>
+          <blockquote>"I was in the <span class="vocab" data-term="wine-cellar">wine cellar</span> from 8:30 PM, choosing a special bottle for the toast. The cellar is far from the office, so I didn't hear a thing. Yes, Mr. Ashford and I had <span class="vocab" data-term="money-problems">money problems</span> this year. But I never went near his office tonight."</blockquote>
+          <p class="narration">Detective Reyes wrote one word next to his name: motive.</p>
+        </div>
+      </div>
+
+      <div class="suspect-row">
+        <div class="lot-number">02</div>
+        <div>
+          <h3 class="suspect-name">Ms. Lila</h3>
+          <div class="suspect-role"><span class="vocab" data-term="personal-assistant">Personal Assistant</span></div>
+          <div class="time-tags"><span class="time-tag">Balcony · 9:00 PM</span><span class="time-tag">Saw light off · 9:20 PM</span></div>
+          <p class="narration">Ms. Lila came in next, her hands still shaking a little.</p>
+          <blockquote>"I was outside on the <span class="vocab" data-term="balcony">balcony</span> at 9:00 PM. I needed some <span class="vocab" data-term="fresh-air">fresh air</span> away from the noise. At about 9:20 PM, I saw the office light turn off. It scared me, so I hurried back inside. I never went near the office door."</blockquote>
+          <p class="narration">Detective Reyes nodded slowly and made a small note about the light.</p>
+        </div>
+      </div>
+
+      <div class="suspect-row">
+        <div class="lot-number">03</div>
+        <div>
+          <h3 class="suspect-name">Mr. Drake</h3>
+          <div class="suspect-role">Old Friend</div>
+          <div class="time-tags"><span class="time-tag">Passed office · 9:15 PM</span></div>
+          <p class="narration">Mr. Drake walked in last, speaking quickly, eager to help.</p>
+          <blockquote>"I can tell you everything, Detective! At 9:15 PM, I walked past the office door and saw Mr. Ashford talking to another man inside. I checked my <span class="vocab" data-term="digital-watch">digital watch</span> to remember the exact time — the small hand was on the 9, and the big hand was on the 3. Then I heard a loud <span class="vocab" data-term="crash">crash</span>, so I ran away. I was too <span class="vocab" data-term="frightened">frightened</span> to go inside."</blockquote>
+          <p class="narration">Detective Reyes looked at Mr. Drake's wrist for a long moment, and said nothing at all.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="cta-row" style="margin-top:1rem;justify-content:flex-start;">
+      <button class="btn btn-primary" data-view="evidence">Go to the Evidence Room →</button>
+    </div>
+  </section>
+
+  <!-- ============ EVIDENCE ROOM ============ -->
+  <section id="evidence" class="view">
+    <div class="section-head">
+      <div class="lot-label">Lot 03 — Evidence Room</div>
+      <h2>Notes, clues &amp; challenges</h2>
+      <p class="th-note">ตอบคำถามในสมุดโน้ตของนักสืบ แล้วลองเล่นเกมเรียงเวลาและควิซทบทวนความเข้าใจ</p>
+    </div>
+
+    <div class="notebook">
+      <h3>Detective Reyes's Notebook</h3>
+      <ul>
+        <li>What does Mr. Drake say his watch looked like? Write down the exact words.</li>
+        <li>What kind of watch did he say he was wearing?</li>
+        <li>Whose alibi has no witness at all?</li>
+        <li>Does everyone's story fit inside the murder window of 9:00–9:30 PM?</li>
+      </ul>
+    </div>
+
+    <div class="game-card">
+      <h3>Challenge — Build the Timeline</h3>
+      <p class="game-sub">Click events in the correct order, then press "Check Order."</p>
+      <div class="pool" id="timelinePool"></div>
+      <div class="sequence" id="timelineSeq"></div>
+      <div class="game-actions">
+        <button class="btn btn-primary" id="checkTimeline">Check Order</button>
+        <button class="btn btn-ghost" id="resetTimeline">Reset</button>
+      </div>
+      <div class="feedback" id="timelineFeedback" aria-live="polite"></div>
+    </div>
+
+    <div class="game-card">
+      <h3>Challenge — Quick Quiz</h3>
+      <p class="game-sub">Test your reading comprehension. Pick one answer for each question.</p>
+      <div id="quizContainer"></div>
+      <div class="quiz-score" id="quizScore" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ============ VOCAB ============ -->
+  <section id="vocab" class="view">
+    <div class="section-head">
+      <div class="lot-label">Lot 04 — Vocabulary Bank</div>
+      <h2>Flip the cards to review</h2>
+      <p class="th-note">คลิกที่การ์ดเพื่อดูคำแปลภาษาไทยและความหมาย</p>
+    </div>
+    <div class="flash-grid" id="flashGrid"></div>
+  </section>
+
+  <!-- ============ ACCUSE ============ -->
+  <section id="accuse" class="view">
+    <div class="section-head">
+      <div class="lot-label">Lot 05 — Final Step</div>
+      <h2>Who killed Mr. Ashford?</h2>
+      <p class="th-note">เมื่อพร้อมแล้ว เลือกผู้ต้องสงสัยที่คุณคิดว่าเป็นคนร้าย — และเตรียมอธิบายเหตุผลให้เพื่อนในทีมฟัง</p>
+    </div>
+    <div class="accuse-grid">
+      <button class="accuse-btn" data-suspect="bennett"><h3 class="suspect-name">Mr. Bennett</h3><div class="suspect-role">Business Partner</div></button>
+      <button class="accuse-btn" data-suspect="lila"><h3 class="suspect-name">Ms. Lila</h3><div class="suspect-role">Personal Assistant</div></button>
+      <button class="accuse-btn" data-suspect="drake"><h3 class="suspect-name">Mr. Drake</h3><div class="suspect-role">Old Friend</div></button>
+    </div>
+
+    <div class="hints">
+      <button class="btn btn-ghost" id="hint1btn">Need a clue? Reveal Hint 1</button>
+      <button class="btn btn-ghost" id="hint2btn" hidden>Reveal Hint 2</button>
+      <div id="hint1box" class="hint-box" hidden>Hint 1: Look closely at what Mr. Drake says about his watch.</div>
+      <div id="hint2box" class="hint-box" hidden>Hint 2: Does a digital watch really have a "small hand" and a "big hand"?</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>Detective Reyes's Case Files · For classroom reading practice · The Inner Circle</footer>
+
+<div class="popover" id="vocabPopover" hidden></div>
+
+<div class="modal-overlay" id="modalOverlay" hidden>
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script>
+/* ---------- NAV ---------- */
+const views = document.querySelectorAll('.view');
+const navButtons = document.querySelectorAll('#mainNav button');
+function showView(id){
+  views.forEach(v=>v.classList.toggle('active', v.id===id));
+  navButtons.forEach(b=>b.classList.toggle('active', b.dataset.view===id));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.querySelectorAll('[data-view]').forEach(el=>{
+  el.addEventListener('click', ()=> showView(el.dataset.view));
+});
+
+/* ---------- VOCAB DATA ---------- */
+const VOCAB = {
+  'diamond-dealer': {en:'diamond dealer', th:'พ่อค้าเพชร', def:'a person who buys and sells diamonds'},
+  'retirement-party': {en:'retirement party', th:'งานเลี้ยงเกษียณ', def:'a party held when someone stops working'},
+  'private-office': {en:'private office', th:'ห้องทำงานส่วนตัว', def:'a room used only by one person for work'},
+  'glass-case': {en:'glass case', th:'ตู้กระจก', def:'a box made of glass, used to display or protect something'},
+  'waiter': {en:'waiter', th:'บริกร', def:'a person who serves food and drinks at a party or restaurant'},
+  'police-doctor': {en:'police doctor', th:'แพทย์นิติเวช', def:'a doctor who examines a body to find out how someone died'},
+  'notebook': {en:'notebook', th:'สมุดบันทึก', def:'a small book for writing notes'},
+  'business-partner': {en:'business partner', th:'หุ้นส่วนธุรกิจ', def:'a person who shares ownership of a business'},
+  'wine-cellar': {en:'wine cellar', th:'ห้องเก็บไวน์', def:'a room, usually underground, used for storing wine'},
+  'money-problems': {en:'money problems', th:'ปัญหาเรื่องเงิน', def:'difficulties related to having or owing money'},
+  'personal-assistant': {en:'personal assistant', th:'ผู้ช่วยส่วนตัว', def:'someone who helps a person with daily tasks and schedules'},
+  'balcony': {en:'balcony', th:'ระเบียง', def:'a platform outside an upper window of a building'},
+  'fresh-air': {en:'fresh air', th:'อากาศบริสุทธิ์', def:'clean air, especially outdoors'},
+  'digital-watch': {en:'digital watch', th:'นาฬิกาดิจิทัล', def:'a watch that shows the time using numbers, not hands'},
+  'frightened': {en:'frightened', th:'หวาดกลัว', def:'feeling afraid'},
+  'crash': {en:'crash', th:'เสียงดังสนั่น', def:'a sudden loud noise, often from something breaking or falling'}
+};
+
+/* ---------- VOCAB POPOVER ---------- */
+const popover = document.getElementById('vocabPopover');
+function showPopover(el, term){
+  const data = VOCAB[term];
+  if(!data) return;
+  popover.innerHTML = `<button class="close" aria-label="close">×</button><span class="th">${data.th}</span><span class="def">${data.def}</span>`;
+  popover.hidden = false;
+  const rect = el.getBoundingClientRect();
+  let left = rect.left + window.scrollX;
+  const top = rect.bottom + window.scrollY + 8;
+  const maxLeft = window.scrollX + window.innerWidth - 260;
+  left = Math.max(window.scrollX + 8, Math.min(left, maxLeft));
+  popover.style.left = left + 'px';
+  popover.style.top = top + 'px';
+  popover.querySelector('.close').addEventListener('click', ()=> popover.hidden = true);
+}
+document.addEventListener('click', (e)=>{
+  const target = e.target.closest('.vocab');
+  if(target){
+    showPopover(target, target.dataset.term);
+    e.stopPropagation();
+  } else if(!e.target.closest('.popover')){
+    popover.hidden = true;
+  }
+});
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') popover.hidden = true; });
+
+/* ---------- FLASHCARDS ---------- */
+const flashGrid = document.getElementById('flashGrid');
+Object.keys(VOCAB).forEach(key=>{
+  const d = VOCAB[key];
+  const card = document.createElement('div');
+  card.className = 'flip-card';
+  card.innerHTML = `<div class="flip-inner">
+      <div class="flip-front">${d.en}</div>
+      <div class="flip-back"><span class="th">${d.th}</span><span class="def">${d.def}</span></div>
+    </div>`;
+  card.addEventListener('click', ()=> card.classList.toggle('flipped'));
+  flashGrid.appendChild(card);
+});
+
+/* ---------- TIMELINE GAME ---------- */
+const events = [
+  {id:'e1', text:'8:30 PM — Mr. Bennett goes down to the wine cellar.'},
+  {id:'e2', text:'9:00 PM — Mr. Ashford leaves his own party to check the diamond.'},
+  {id:'e3', text:'9:00 PM — Ms. Lila steps outside onto the balcony.'},
+  {id:'e4', text:'9:15 PM — Mr. Drake says he walks past the office door.'},
+  {id:'e5', text:'9:20 PM — Ms. Lila sees the office light turn off.'},
+  {id:'e6', text:'9:30 PM — The estimated murder window closes.'},
+  {id:'e7', text:'9:45 PM — A waiter finds Mr. Ashford on the office floor.'},
+  {id:'e8', text:'Detective Reyes begins questioning the three guests.'}
+];
+const correctOrder = events.map(e=>e.id);
+let pool = [];
+let sequence = [];
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function renderTimeline(){
+  const poolEl = document.getElementById('timelinePool');
+  const seqEl = document.getElementById('timelineSeq');
+  poolEl.innerHTML = '';
+  seqEl.innerHTML = '';
+  pool.forEach(id=>{
+    const ev = events.find(e=>e.id===id);
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = ev.text;
+    btn.addEventListener('click', ()=>{
+      pool = pool.filter(p=>p!==id);
+      sequence.push(id);
+      renderTimeline();
+    });
+    poolEl.appendChild(btn);
+  });
+  if(sequence.length===0){
+    seqEl.innerHTML = '<span class="mono" style="color:#5a606b;font-size:.8rem;">Click events above to add them here, in order →</span>';
+  }
+  sequence.forEach((id,idx)=>{
+    const ev = events.find(e=>e.id===id);
+    const btn = document.createElement('button');
+    btn.className = 'chip placed';
+    btn.innerHTML = `<span class="slot-num">${idx+1}.</span>${ev.text}`;
+    btn.addEventListener('click', ()=>{
+      sequence = sequence.filter(s=>s!==id);
+      pool.push(id);
+      renderTimeline();
+    });
+    seqEl.appendChild(btn);
+  });
+}
+function resetTimeline(){
+  pool = shuffle(events.map(e=>e.id));
+  sequence = [];
+  document.getElementById('timelineFeedback').textContent = '';
+  renderTimeline();
+}
+document.getElementById('checkTimeline').addEventListener('click', ()=>{
+  const fb = document.getElementById('timelineFeedback');
+  if(sequence.length !== correctOrder.length){
+    fb.textContent = `Place all ${correctOrder.length} events in the sequence first.`;
+    return;
+  }
+  let correctCount = 0;
+  const seqEl = document.getElementById('timelineSeq');
+  [...seqEl.children].forEach((chip, idx)=>{
+    if(sequence[idx] === correctOrder[idx]){
+      chip.classList.add('correct'); chip.classList.remove('wrong');
+      correctCount++;
+    } else {
+      chip.classList.add('wrong'); chip.classList.remove('correct');
+    }
+  });
+  fb.textContent = correctCount === correctOrder.length
+    ? `Perfect! ${correctCount}/${correctOrder.length} correct — the timeline is complete.`
+    : `${correctCount}/${correctOrder.length} correct. Check the highlighted events and try again.`;
+});
+document.getElementById('resetTimeline').addEventListener('click', resetTimeline);
+resetTimeline();
+
+/* ---------- QUIZ GAME ---------- */
+const quiz = [
+  {q:'What was Mr. Ashford\u2019s job?', options:['Diamond dealer','Waiter','Police doctor','Musician'], correct:0},
+  {q:'What time did the waiter find Mr. Ashford?', options:['9:00 PM','9:20 PM','9:30 PM','9:45 PM'], correct:3},
+  {q:'Where was Mr. Bennett from 8:30 PM?', options:['On the balcony','In the wine cellar','In the office','At the front door'], correct:1},
+  {q:'Where did Ms. Lila go for fresh air?', options:['The garden','The kitchen','The balcony','The wine cellar'], correct:2},
+  {q:'What did Mr. Drake use to check the time?', options:['A clock on the wall','His phone','His digital watch','Someone else\u2019s watch'], correct:2}
+];
+let quizScore = 0;
+let quizAnswered = 0;
+const quizContainer = document.getElementById('quizContainer');
+quiz.forEach((item, qi)=>{
+  const wrap = document.createElement('div');
+  wrap.className = 'quiz-q';
+  const p = document.createElement('p');
+  p.textContent = `${qi+1}. ${item.q}`;
+  wrap.appendChild(p);
+  item.options.forEach((opt, oi)=>{
+    const b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = opt;
+    b.addEventListener('click', ()=>{
+      if(b.classList.contains('correct') || b.classList.contains('wrong')) return;
+      const buttons = wrap.querySelectorAll('.quiz-opt');
+      buttons.forEach(x=>x.disabled=true);
+      if(oi === item.correct){
+        b.classList.add('correct');
+        quizScore++;
+      } else {
+        b.classList.add('wrong');
+        buttons[item.correct].classList.add('correct');
+      }
+      quizAnswered++;
+      document.getElementById('quizScore').textContent = `Score: ${quizScore}/${quiz.length} (${quizAnswered}/${quiz.length} answered)`;
+    });
+    wrap.appendChild(b);
+  });
+  quizContainer.appendChild(wrap);
+});
+
+/* ---------- ACCUSE GAME ---------- */
+const ANSWER = 'drake';
+const modalOverlay = document.getElementById('modalOverlay');
+const modalBox = document.getElementById('modalBox');
+function openModal(html){ modalBox.innerHTML = html; modalOverlay.hidden = false; }
+function closeModal(){ modalOverlay.hidden = true; }
+modalOverlay.addEventListener('click', (e)=>{ if(e.target===modalOverlay) closeModal(); });
+
+document.querySelectorAll('.accuse-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const suspect = btn.dataset.suspect;
+    const name = btn.querySelector('.suspect-name').textContent;
+    openModal(`
+      <h3>Confirm Your Accusation</h3>
+      <p>Are you sure, Detective? You are about to accuse <strong>${name}</strong> of the theft of the Ashford Star.</p>
+      <div class="row">
+        <button class="btn btn-wine" id="confirmYes">Yes, Make the Accusation</button>
+        <button class="btn btn-ghost" id="confirmNo">No, Keep Investigating</button>
+      </div>
+    `);
+    document.getElementById('confirmNo').addEventListener('click', closeModal);
+    document.getElementById('confirmYes').addEventListener('click', ()=>{
+      if(suspect === ANSWER){
+        openModal(`
+          <div class="stamp-result stamp-win">Case Closed</div>
+          <h3>Well done, Detective.</h3>
+          <p>${name} is taken in for questioning. But an accusation isn't a full report — Detective Reyes still needs your reasoning. Can you explain, using details from the testimonies, exactly why this story doesn't add up?</p>
+          <div class="row"><button class="btn btn-primary" id="closeFinal">Close</button></div>
+        `);
+      } else {
+        openModal(`
+          <div class="stamp-result stamp-lose">Case Still Open</div>
+          <h3>Not quite, Detective.</h3>
+          <p>${name} is released — the evidence doesn't hold up. Go back to the testimonies and read each one again, word for word.</p>
+          <div class="row"><button class="btn btn-primary" id="closeFinal">Back to Investigation</button></div>
+        `);
+      }
+      document.getElementById('closeFinal').addEventListener('click', closeModal);
+    });
+  });
+});
+
+document.getElementById('hint1btn').addEventListener('click', ()=>{
+  document.getElementById('hint1box').hidden = false;
+  document.getElementById('hint1btn').hidden = true;
+  document.getElementById('hint2btn').hidden = false;
+});
+document.getElementById('hint2btn').addEventListener('click', ()=>{
+  document.getElementById('hint2box').hidden = false;
+  document.getElementById('hint2btn').hidden = true;
+});
+</script>
+</body>
+</html>
